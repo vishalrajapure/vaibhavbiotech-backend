@@ -23,7 +23,7 @@ public class ProductController {
     @GetMapping("/GetProducts")
     public List<Product> getAllProducts() {
         List<Product> productList = productServiceImpl.getAllProducts();
-        return null;
+        return productList;
     }
 
 }
