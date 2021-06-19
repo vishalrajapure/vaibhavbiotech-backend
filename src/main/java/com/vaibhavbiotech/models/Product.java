@@ -22,7 +22,7 @@ public class Product extends AuditModel {
     @Column(name = "description")
     private String description;
     @Column(name = "price")
-    private float price;
+    private String price;
     @Column(name = "image_link")
     private String imageLink;
     @Column(name = "plant_type")
@@ -58,11 +58,11 @@ public class Product extends AuditModel {
         this.description = description;
     }
 
-    public float getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
