@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("/Products")
+@RestController
 public class ProductController {
 
     @Autowired
     private ProductServiceImpl productServiceImpl;
 
-    @PostMapping("/AddProduct")
+    @PostMapping("/Products/AddProduct")
     public Product addProduct(@RequestBody Product product) {
         Product storedProduct = productServiceImpl.addProduct(product);
         return storedProduct;
     }
 
     @GetMapping
-    public List<Product> getProdcut() {
+    public List<Product> getProduct() {
 
         return null;
     }

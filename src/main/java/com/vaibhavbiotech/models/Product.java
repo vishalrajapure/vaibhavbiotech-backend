@@ -6,14 +6,23 @@ import javax.persistence.*;
 @Table(name = "PRODUCTS")
 public class Product extends AuditModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @SequenceGenerator(
+            name = "client_sequence",
+            sequenceName = "client_sequence",
+            initialValue = 1,
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "client_sequence"
+    )
+    private long id;
     @Column(name = "product_name")
     private String productName;
     @Column(name = "description")
     private String description;
     @Column(name = "price")
-    private Long price;
+    private float price;
     @Column(name = "image_link")
     private String imageLink;
     @Column(name = "plant_type")
@@ -25,11 +34,11 @@ public class Product extends AuditModel {
 
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,11 +58,11 @@ public class Product extends AuditModel {
         this.description = description;
     }
 
-    public Long getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
