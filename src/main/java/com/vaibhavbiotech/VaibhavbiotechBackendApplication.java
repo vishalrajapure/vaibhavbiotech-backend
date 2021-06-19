@@ -2,8 +2,10 @@ package com.vaibhavbiotech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class VaibhavbiotechBackendApplication {
 
 	public static void main(String[] args) {
