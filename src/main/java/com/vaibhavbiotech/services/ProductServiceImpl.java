@@ -35,4 +35,10 @@ public class ProductServiceImpl implements ProductService{
         productFromDb.setShowOnHomePage(productRequest.isShowOnHomePage());
         return productRepository.save(productFromDb);
     }
+
+    @Override
+    public String deleteProduct(long id) {
+        productRepository.deleteById(id);
+        return "product delete";
+    }
 }

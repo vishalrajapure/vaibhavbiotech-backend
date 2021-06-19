@@ -30,4 +30,9 @@ public class ProductController {
        return productServiceImpl.updateProduct(product);
     }
 
+    @DeleteMapping("/DeleteProduct/{id}")
+    public String updateProduct(@PathVariable("id") long id) {
+        return productServiceImpl.deleteProduct(id);
+    }
+
 }
