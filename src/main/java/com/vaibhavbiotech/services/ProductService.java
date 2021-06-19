@@ -12,4 +12,6 @@ public interface ProductService {
     Product updateProduct(Product product);
 
     String deleteProduct(long id);
+
+    List<Product> getLatestProducts();
 }

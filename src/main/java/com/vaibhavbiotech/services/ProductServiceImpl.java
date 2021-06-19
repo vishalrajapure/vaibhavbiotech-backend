@@ -5,10 +5,11 @@ import com.vaibhavbiotech.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -39,6 +40,16 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public String deleteProduct(long id) {
         productRepository.deleteById(id);
-        return "product delete";
+        return "product deleted";
+    }
+
+    @Override
+    public List<Product> getLatestProducts() {
+        List<Product> latestProducts = new ArrayList<>();
+        productRepository.findAll().forEach(product -> {
+            if (product.isShowOnHomePage())
+                latestProducts.add(product);
+        });
+        return latestProducts;
     }
 }
