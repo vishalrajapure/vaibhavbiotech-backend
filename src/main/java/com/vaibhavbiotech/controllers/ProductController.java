@@ -22,8 +22,12 @@ public class ProductController {
 
     @GetMapping("/GetProducts")
     public List<Product> getAllProducts() {
-        List<Product> productList = productServiceImpl.getAllProducts();
-        return productList;
+        return productServiceImpl.getAllProducts();
+    }
+
+    @PutMapping("/UpdateProduct")
+    public Product updateProduct(@RequestBody Product product) {
+       return productServiceImpl.updateProduct(product);
     }
 
 }
