@@ -34,19 +34,19 @@ public class ContactUsServiceImpl implements ContactUsService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "143.95.62.230");
-        props.put("mail.smtp.port", "26");
+        props.put("mail.smtp.host", "mx1.hostinger.in");
+        props.put("mail.smtp.port", "465");
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("info@resaleguru.in", "resaleguru@123");
+                return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhabiotech@123");
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("info@resaleguru.in", "Resale Guru"));
+        msg.setFrom(new InternetAddress("info@vaibhavbiotech.com", "Vaibhav Biotech"));
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(contactUs.getEmail()));
-        msg.setSubject("Registration at Resale Guru");
+        msg.setSubject("Registration at Vaibhav Biotech");
         //msg.setContent("Tutorials point email", "text/html");
         msg.setSentDate(new Date());
 
@@ -54,7 +54,7 @@ public class ContactUsServiceImpl implements ContactUsService {
         messageBodyPart.setContent("Hi " + contactUs.getName() + ", <br></br><br></br>" +
                 "We have received your contact details. Our team will contact you soon." + "<br></br><br></br>" +
                 "Regards,<br></br>" +
-                "Team ResaleGuru", "text/html");
+                "Team Vaibhav Biotech", "text/html");
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
@@ -70,18 +70,18 @@ public class ContactUsServiceImpl implements ContactUsService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "143.95.62.230");
-        props.put("mail.smtp.port", "26");
+        props.put("mail.smtp.host", "smtp.hostinger.com");
+        props.put("mail.smtp.port", "465");
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("info@resaleguru.in", "resaleguru@123");
+                return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhabiotech@123");
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("ResaleGuru@resaleguru.in", false));
+        msg.setFrom(new InternetAddress("info@vaibhavbiotech.com", "Vaibhav Biotech"));
 
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("info@resaleguru.in"));
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("info@vaibhavbiotech.com"));
         msg.setSubject("Hi");
         //msg.setContent("Tutorials point email", "text/html");
         msg.setSentDate(new Date());
