@@ -26,7 +26,7 @@ public class ContactUsServiceImpl implements ContactUsService {
 
     public String sendDetails(ContactUs contactUs) throws MessagingException, IOException {
         this.sendMail(contactUs);
-        this.sendSelfMail(contactUs);
+    //    this.sendSelfMail(contactUs);
         return "email sent";
     }
 
@@ -34,12 +34,12 @@ public class ContactUsServiceImpl implements ContactUsService {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "mx1.hostinger.in");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.host", "smtp.hostinger.com");
+        props.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhabiotech@123");
+                return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhavbiotech@123");
             }
         });
         Message msg = new MimeMessage(session);
@@ -71,7 +71,7 @@ public class ContactUsServiceImpl implements ContactUsService {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.hostinger.com");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
