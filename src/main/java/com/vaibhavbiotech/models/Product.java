@@ -28,10 +28,19 @@ public class Product extends AuditModel {
     @Column(name = "plant_type")
     private PlantType plantType;
     @Column(name = "show_on_home_page")
-    private boolean showOnHomePage;
+    private boolean showOnHomePage = false;
 
     public Product() {
 
+    }
+
+    public Product(String productName, String description, String price, String imageLink, PlantType plantType, boolean showOnHomePage) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.imageLink = imageLink;
+        this.plantType = plantType;
+        this.showOnHomePage = showOnHomePage;
     }
 
     public long getId() {
