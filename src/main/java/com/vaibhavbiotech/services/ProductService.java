@@ -1,15 +1,19 @@
 package com.vaibhavbiotech.services;
 
 import com.vaibhavbiotech.models.Product;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import java.util.List;
 
 public interface ProductService {
-    Product addProduct(Product product);
+    Product addProductToDb(Product product);
 
     List<Product> getAllProducts();
 
     Product updateProduct(Product product);
+
+    String uploadImageViaFTP(MultipartFile file);
 
     String deleteProduct(long id);
 

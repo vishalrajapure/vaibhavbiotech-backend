@@ -2,10 +2,17 @@ package com.vaibhavbiotech.services;
 
 import com.vaibhavbiotech.models.Product;
 import com.vaibhavbiotech.repository.ProductRepository;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -14,8 +21,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+
     @Override
-    public Product addProduct(Product product) {
+    public Product addProductToDb(Product product) {
         Product storedProduct = productRepository.save(product);
         return storedProduct;
     }
@@ -35,6 +43,56 @@ public class ProductServiceImpl implements ProductService {
         productFromDb.setPlantType(productRequest.getPlantType());
         productFromDb.setShowOnHomePage(productRequest.isShowOnHomePage());
         return productRepository.save(productFromDb);
+    }
+
+    public String uploadImageViaFTP(MultipartFile file) {
+        String server = "ftp.vaibhavbiotech.com";
+        int port = 21;
+        String user = "u620014590.vaibhavbiotech";
+        String pass = "Vaibhavbiotech@123";
+
+        FTPClient ftpClient = new FTPClient();
+        try {
+
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+            InputStream inputStream = file.getInputStream();
+
+
+            OutputStream outputStream = ftpClient.storeFileStream(file.getOriginalFilename());
+            byte[] bytesIn = new byte[8192];
+            int read = 0;
+            System.out.println("Started uploading image at " + Calendar.getInstance().getTime());
+            while ((read = inputStream.read(bytesIn)) != -1) {
+                outputStream.write(bytesIn, 0, read);
+            }
+
+            inputStream.close();
+            outputStream.close();
+            boolean completed = ftpClient.completePendingCommand();
+            if (completed) {
+                System.out.println("Image uploaded successfully at " + Calendar.getInstance().getTime());
+            }
+
+
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return "success";
     }
 
     @Override
