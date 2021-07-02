@@ -23,6 +23,7 @@ public class ProductController {
                                @RequestParam String price,
                                @RequestParam String description,
                                @RequestParam PlantType plantType) {
+        //need to check if product with same name exist?
         System.out.println("Started adding product : " + productName);
         String[] tokenizedNameArr = file.getOriginalFilename().split("\\.");
         String updatedFileName = productName + "." + tokenizedNameArr[tokenizedNameArr.length - 1];
@@ -45,6 +46,7 @@ public class ProductController {
 
     @GetMapping("/GetProducts")
     public List<Product> getAllProducts() {
+        System.out.println("Fetching all products");
         return productServiceImpl.getAllProducts();
     }
 
