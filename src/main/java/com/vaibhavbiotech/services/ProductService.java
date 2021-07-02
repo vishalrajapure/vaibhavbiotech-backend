@@ -3,7 +3,6 @@ package com.vaibhavbiotech.services;
 import com.vaibhavbiotech.models.Product;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import java.util.List;
 
 public interface ProductService {
@@ -13,7 +12,7 @@ public interface ProductService {
 
     Product updateProduct(Product product);
 
-    String uploadImageViaFTP(MultipartFile file);
+    boolean uploadImageViaFTP(MultipartFile file, String updatedFileName);
 
     String deleteProduct(long id);
 
