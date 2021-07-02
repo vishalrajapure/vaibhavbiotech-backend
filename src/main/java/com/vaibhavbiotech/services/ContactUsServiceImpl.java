@@ -26,7 +26,6 @@ public class ContactUsServiceImpl implements ContactUsService {
 
     public String sendDetails(ContactUs contactUs) throws MessagingException, IOException {
         this.sendMail(contactUs);
-    //    this.sendSelfMail(contactUs);
         return "email sent";
     }
 
@@ -42,12 +41,13 @@ public class ContactUsServiceImpl implements ContactUsService {
                 return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhavbiotech@123");
             }
         });
+
+        //sending email to client
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress("info@vaibhavbiotech.com", "Vaibhav Biotech"));
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(contactUs.getEmail()));
         msg.setSubject("Registration at Vaibhav Biotech");
-        //msg.setContent("Tutorials point email", "text/html");
         msg.setSentDate(new Date());
 
         MimeBodyPart messageBodyPart = new MimeBodyPart();
@@ -58,46 +58,25 @@ public class ContactUsServiceImpl implements ContactUsService {
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
-        //MimeBodyPart attachPart = new MimeBodyPart();
-
-        //attachPart.attachFile("/var/tmp/image19.png");
-        //multipart.addBodyPart(attachPart);
         msg.setContent(multipart);
         Transport.send(msg);
-    }
 
-    public void sendSelfMail(ContactUs contactUs) throws AddressException, MessagingException, IOException {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.hostinger.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("info@vaibhavbiotech.com", "Vaibhabiotech@123");
-            }
-        });
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("info@vaibhavbiotech.com", "Vaibhav Biotech"));
+        //Sending self email
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("info@vaibhavbiotech.com"));
-        msg.setSubject("Hi");
-        //msg.setContent("Tutorials point email", "text/html");
+        msg.setSubject("Registration at Vaibhav Biotech");
         msg.setSentDate(new Date());
 
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent("Name: " + contactUs.getName() + "<br></br>" +
+        MimeBodyPart messageBodyPart1 = new MimeBodyPart();
+        messageBodyPart1.setContent("Enquiry Received From: <br></br><br></br> Name: " + contactUs.getName() + "<br></br>" +
                 "Email: " + contactUs.getEmail() + "<br></br>" +
+                "Contact: " + contactUs.getPhone() + "<br></br>" +
                 "Message: " + contactUs.getMessage() + "<br></br>", "text/html");
 
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(messageBodyPart);
-        //MimeBodyPart attachPart = new MimeBodyPart();
-
-        //attachPart.attachFile("/var/tmp/image19.png");
-        //multipart.addBodyPart(attachPart);
-        msg.setContent(multipart);
+        Multipart multipart1 = new MimeMultipart();
+        multipart1.addBodyPart(messageBodyPart1);
+        msg.setContent(multipart1);
         Transport.send(msg);
+
     }
 }
