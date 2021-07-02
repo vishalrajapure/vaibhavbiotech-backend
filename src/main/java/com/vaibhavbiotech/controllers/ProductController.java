@@ -18,25 +18,29 @@ public class ProductController {
     private ProductServiceImpl productServiceImpl;
 
     @PostMapping(value = "AddProduct")
-    public String uploadImage(@RequestParam MultipartFile file,
-                              @RequestParam String productName,
-                              @RequestParam String price,
-                              @RequestParam String description,
-                              @RequestParam PlantType plantType) {
-
-        String result = this.productServiceImpl.uploadImageViaFTP(file);
-        String[] arr = file.getOriginalFilename().split("\\.");
-        if (result != null && result.equals("success")) {
+    public Boolean uploadImage(@RequestParam MultipartFile file,
+                               @RequestParam String productName,
+                               @RequestParam String price,
+                               @RequestParam String description,
+                               @RequestParam PlantType plantType) {
+        System.out.println("Started adding product : " + productName);
+        String[] tokenizedNameArr = file.getOriginalFilename().split("\\.");
+        String updatedFileName = productName + "." + tokenizedNameArr[tokenizedNameArr.length - 1];
+        boolean result = this.productServiceImpl.uploadImageViaFTP(file, updatedFileName);
+        if (result) {
             Product product = new Product();
             product.setProductName(productName);
             product.setPrice(price);
             product.setDescription(description);
             product.setPlantType(plantType);
-            product.setImageLink("www.vaibhavbiotech.com/webimages/" + productName + arr[arr.length - 1]);
-            this.productServiceImpl.addProductToDb(product);
-            return "Product successfully uploaded";
+            product.setImageLink("https://www.vaibhavbiotech.com/webimages/" + productName + "." + tokenizedNameArr[tokenizedNameArr.length - 1]);
+            Product dbProduct = this.productServiceImpl.addProductToDb(product);
+            if (dbProduct != null) {
+                System.out.println("Product added Successfully : " + productName);
+                return true;
+            }
         }
-        return "Upload failed";
+        return false;
     }
 
     @GetMapping("/GetProducts")
