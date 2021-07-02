@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(productFromDb);
     }
 
-    public String uploadImageViaFTP(MultipartFile file) {
+    public boolean uploadImageViaFTP(MultipartFile file, String updatedFileName) {
         String server = "ftp.vaibhavbiotech.com";
         int port = 21;
         String user = "u620014590.vaibhavbiotech";
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
             InputStream inputStream = file.getInputStream();
 
 
-            OutputStream outputStream = ftpClient.storeFileStream(file.getOriginalFilename());
+            OutputStream outputStream = ftpClient.storeFileStream(updatedFileName);
             byte[] bytesIn = new byte[8192];
             int read = 0;
             System.out.println("Started uploading image at " + Calendar.getInstance().getTime());
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException ex) {
             System.out.println("Error: " + ex.getMessage());
             ex.printStackTrace();
-            return null;
+            return false;
         } finally {
             try {
                 if (ftpClient.isConnected()) {
@@ -90,9 +90,10 @@ public class ProductServiceImpl implements ProductService {
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
+                return false;
             }
         }
-        return "success";
+        return true;
     }
 
     @Override
