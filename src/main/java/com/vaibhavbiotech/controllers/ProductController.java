@@ -65,4 +65,9 @@ public class ProductController {
         return productServiceImpl.getLatestProducts();
     }
 
+    @GetMapping("/HealthCheck")
+    public String healthCheck() {
+        return "App is up and running";
+    }
+
 }
