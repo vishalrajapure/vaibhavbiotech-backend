@@ -1,6 +1,8 @@
 package com.vaibhavbiotech.services;
 
+import com.vaibhavbiotech.models.ClientSequence;
 import com.vaibhavbiotech.models.Product;
+import com.vaibhavbiotech.repository.ClientSequenceRepository;
 import com.vaibhavbiotech.repository.ProductRepository;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -20,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ClientSequenceRepository clientSequenceRepository;
 
 
     @Override
@@ -45,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(productFromDb);
     }
 
-    public boolean uploadImageViaFTP(MultipartFile file, String updatedFileName) {
+    public Long uploadImageViaFTP(MultipartFile file, String extension) {
         String server = "ftp.vaibhavbiotech.com";
         int port = 21;
         String user = "u620014590.vaibhavbiotech";
@@ -61,6 +66,9 @@ public class ProductServiceImpl implements ProductService {
 
             InputStream inputStream = file.getInputStream();
 
+            List<ClientSequence> clientSequenceList = clientSequenceRepository.findAll();
+            ClientSequence clientSequence = clientSequenceList.get(0);
+            String updatedFileName = clientSequence.getNext_val() + extension;
 
             OutputStream outputStream = ftpClient.storeFileStream(updatedFileName);
             byte[] bytesIn = new byte[8192];
@@ -75,13 +83,14 @@ public class ProductServiceImpl implements ProductService {
             boolean completed = ftpClient.completePendingCommand();
             if (completed) {
                 System.out.println("Image uploaded successfully at " + Calendar.getInstance().getTime());
+                return clientSequence.getNext_val();
             }
 
 
         } catch (IOException ex) {
             System.out.println("Error: " + ex.getMessage());
             ex.printStackTrace();
-            return false;
+            return -1L;
         } finally {
             try {
                 if (ftpClient.isConnected()) {
@@ -90,10 +99,10 @@ public class ProductServiceImpl implements ProductService {
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
-                return false;
+                return -1L;
             }
         }
-        return true;
+        return -1L;
     }
 
     @Override

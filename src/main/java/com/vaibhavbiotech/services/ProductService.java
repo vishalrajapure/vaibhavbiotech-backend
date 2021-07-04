@@ -12,7 +12,7 @@ public interface ProductService {
 
     Product updateProduct(Product product);
 
-    boolean uploadImageViaFTP(MultipartFile file, String updatedFileName);
+    Long uploadImageViaFTP(MultipartFile file, String extension);
 
     String deleteProduct(long id);
 
