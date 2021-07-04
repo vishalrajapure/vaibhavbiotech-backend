@@ -19,7 +19,8 @@ public class Product extends AuditModel {
     private long id;
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "description")
+    @Lob
+    @Column(name = "description", length = 512)
     private String description;
     @Column(name = "price")
     private String price;
