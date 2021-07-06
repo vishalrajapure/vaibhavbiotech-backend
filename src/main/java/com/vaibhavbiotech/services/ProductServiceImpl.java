@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     public Long uploadImageViaFTP(MultipartFile file, String extension) {
         String server = "ftp.vaibhavbiotech.com";
         int port = 21;
-        String user = "u620014590.vaibhavbiotech";
+        String user = "u620014590.vbimages";
         String pass = "Vaibhavbiotech@123";
 
         FTPClient ftpClient = new FTPClient();

@@ -39,7 +39,7 @@ public class ProductController {
             product.setPrice(price);
             product.setDescription(description);
             product.setPlantType(plantType);
-            product.setImageLink("https://www.vaibhavbiotech.com/webimages/" + result + extension);
+            product.setImageLink("https://images.vaibhavbiotech.com/webimages/" + result + extension);
             Product dbProduct = this.productServiceImpl.addProductToDb(product);
             if (dbProduct != null) {
                 System.out.println("Product added Successfully : " + productName);
