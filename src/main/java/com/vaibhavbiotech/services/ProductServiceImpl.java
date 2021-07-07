@@ -1,5 +1,10 @@
 package com.vaibhavbiotech.services;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.vaibhavbiotech.models.ClientSequence;
 import com.vaibhavbiotech.models.Product;
 import com.vaibhavbiotech.repository.ClientSequenceRepository;
@@ -7,12 +12,11 @@ import com.vaibhavbiotech.repository.ProductRepository;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +29,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ClientSequenceRepository clientSequenceRepository;
+
+    @Autowired
+    private AmazonS3 s3client;
+
+    @Value("${jsa.s3.bucket}")
+    private String bucketName;
 
 
     @Override
@@ -103,6 +113,39 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return -1L;
+    }
+
+    public Long uploadImageToS3(MultipartFile multipartFile, String extension) {
+
+        List<ClientSequence> clientSequenceList = clientSequenceRepository.findAll();
+        ClientSequence clientSequence = clientSequenceList.get(0);
+        String updatedFileName = clientSequence.getNext_val() + extension;
+
+        try {
+            File file = new File(updatedFileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(multipartFile.getBytes());
+            fos.close();
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, updatedFileName, file);
+            if (true) {
+                putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+            }
+            s3client.putObject(new PutObjectRequest(bucketName, updatedFileName, file));
+            System.out.println("===================== Upload File - Done! =====================");
+
+        } catch (AmazonServiceException ase) {
+            System.out.println("Caught an AmazonServiceException from PUT requests, rejected reasons:");
+            System.out.println("Error Message:    " + ase.getMessage());
+            System.out.println("HTTP Status Code: " + ase.getStatusCode());
+            System.out.println("AWS Error Code:   " + ase.getErrorCode());
+            System.out.println("Error Type:       " + ase.getErrorType());
+            System.out.println("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException | IOException ace) {
+            System.out.println("Caught an AmazonClientException: ");
+            System.out.println("Error Message: " + ace.getMessage());
+        }
+
+        return clientSequence.getNext_val();
     }
 
     @Override

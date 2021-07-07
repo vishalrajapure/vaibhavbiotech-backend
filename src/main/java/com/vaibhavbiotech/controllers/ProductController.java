@@ -32,14 +32,14 @@ public class ProductController {
         System.out.println("Started adding product : " + productName);
         String[] tokenizedNameArr = file.getOriginalFilename().split("\\.");
         String extension = "." + tokenizedNameArr[tokenizedNameArr.length - 1];
-        Long result = this.productServiceImpl.uploadImageViaFTP(file, extension);
+        Long result = this.productServiceImpl.uploadImageToS3(file, extension);
         if (result >= 0) {
             Product product = new Product();
             product.setProductName(productName);
             product.setPrice(price);
             product.setDescription(description);
             product.setPlantType(plantType);
-            product.setImageLink("https://images.vaibhavbiotech.com/webimages/" + result + extension);
+            product.setImageLink("https://s3.ap-south-1.amazonaws.com/vaibhavbiotech.com/UploadedImages/" + result + extension);
             Product dbProduct = this.productServiceImpl.addProductToDb(product);
             if (dbProduct != null) {
                 System.out.println("Product added Successfully : " + productName);
