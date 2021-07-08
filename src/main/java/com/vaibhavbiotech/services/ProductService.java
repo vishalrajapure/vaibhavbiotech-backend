@@ -14,7 +14,7 @@ public interface ProductService {
 
     Long uploadImageViaFTP(MultipartFile file, String extension);
 
-    String deleteProduct(long id);
+    boolean deleteProduct(long id);
 
     List<Product> getLatestProducts();
 }

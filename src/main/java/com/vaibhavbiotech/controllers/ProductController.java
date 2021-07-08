@@ -1,6 +1,7 @@
 package com.vaibhavbiotech.controllers;
 
 import com.vaibhavbiotech.models.ClientSequence;
+import com.vaibhavbiotech.models.DeleteModel;
 import com.vaibhavbiotech.models.PlantType;
 import com.vaibhavbiotech.models.Product;
 import com.vaibhavbiotech.repository.ClientSequenceRepository;
@@ -61,7 +62,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/DeleteProduct/{id}")
-    public String deleteProduct(@PathVariable("id") long id) {
+    public Boolean deleteProduct(@PathVariable("id") Long id) {
         return productServiceImpl.deleteProduct(id);
     }
 

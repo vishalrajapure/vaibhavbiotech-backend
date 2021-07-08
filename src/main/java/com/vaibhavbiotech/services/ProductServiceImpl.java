@@ -4,8 +4,10 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.vaibhavbiotech.models.ClientSequence;
+import com.vaibhavbiotech.models.DeleteModel;
 import com.vaibhavbiotech.models.Product;
 import com.vaibhavbiotech.repository.ClientSequenceRepository;
 import com.vaibhavbiotech.repository.ProductRepository;
@@ -13,6 +15,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -149,9 +152,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String deleteProduct(long id) {
+    public boolean deleteProduct(long id) {
+        //TODO : delete image from s3 & db
+        Product product = productRepository.findById(id).get();
         productRepository.deleteById(id);
-        return "product deleted";
+        deleteFileFromS3Bucket(product.getImageLink());
+        return true;
+    }
+
+
+    @Async
+    public void deleteFileFromS3Bucket(String imageLink) {
+        String[] imgLinkTokens = imageLink.split("/");
+        String fileName = imgLinkTokens[imgLinkTokens.length - 1];
+        try {
+            s3client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        } catch (AmazonServiceException ex) {
+            System.out.println("Error occurred in spring boot while deleting image from s3");
+        }
     }
 
     @Override
