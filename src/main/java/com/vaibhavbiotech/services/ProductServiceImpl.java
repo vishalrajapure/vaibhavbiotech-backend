@@ -130,10 +130,9 @@ public class ProductServiceImpl implements ProductService {
             fos.write(multipartFile.getBytes());
             fos.close();
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, updatedFileName, file);
-            if (true) {
-                putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
-            }
-            s3client.putObject(new PutObjectRequest(bucketName, updatedFileName, file));
+            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+            s3client.putObject(putObjectRequest);
+            file.delete();
             System.out.println("===================== Upload File - Done! =====================");
 
         } catch (AmazonServiceException ase) {
